@@ -11,13 +11,14 @@ import java.io.Serializable;
 public class Pessoas implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
     private String email;
+
+
 
     public Long getId(){
         return id;
