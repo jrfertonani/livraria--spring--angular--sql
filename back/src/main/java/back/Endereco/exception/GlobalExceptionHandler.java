@@ -1,4 +1,4 @@
-package back.Cep.exception;
+package back.Endereco.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

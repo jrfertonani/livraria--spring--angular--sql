@@ -59,7 +59,6 @@ public class ClienteController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
 
         clienteService.remove(id);
-
         return ResponseEntity.noContent().build();
     }
 

@@ -1,4 +1,4 @@
-package back.Cep;
+package back.Endereco;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -8,8 +8,8 @@ import java.time.Duration;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-import back.Cep.domain.Cep;
-import back.Cep.utils.CEPUtils;
+import back.Endereco.domain.Cep;
+import back.Endereco.utils.CEPUtils;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 

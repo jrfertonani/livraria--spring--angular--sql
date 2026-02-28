@@ -1,7 +1,7 @@
-package back.Cep.utils;
+package back.Endereco.utils;
 
-import back.Cep.exception.ViaCepException;
-import back.Cep.exception.ViaCepFormatException;
+import back.Endereco.exception.ViaCepException;
+import back.Endereco.exception.ViaCepFormatException;
 
 import java.util.Objects;
 

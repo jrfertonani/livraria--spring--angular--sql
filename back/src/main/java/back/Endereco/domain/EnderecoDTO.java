@@ -1,4 +1,4 @@
-package back.Cep.domain;
+package back.Endereco.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

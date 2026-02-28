@@ -1,6 +1,6 @@
 package back.clientes.model.entity;
 
-import back.Cep.domain.EnderecoDTO;
+import back.Endereco.domain.EnderecoDTO;
 import back.livros.model.entity.Livros;
 import jakarta.persistence.*;
 import lombok.Getter;
