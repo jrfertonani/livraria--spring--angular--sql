@@ -1,11 +1,10 @@
 package back.clientes.service;
 
-import back.Cep.ViaCepClient;
-import back.Cep.domain.Cep;
-import back.Cep.domain.EnderecoDTO;
-import back.Cep.exception.ViaCepException;
-import back.Cep.exception.ViaCepFormatException;
-import back.Cep.utils.CEPUtils;
+import back.Endereco.ViaCepClient;
+import back.Endereco.domain.Cep;
+import back.Endereco.domain.EnderecoDTO;
+import back.Endereco.exception.ViaCepFormatException;
+import back.Endereco.utils.CEPUtils;
 import back.clientes.model.dto.ClienteDto;
 import back.clientes.model.entity.Clientes;
 import back.clientes.reposiory.ClienteRepository;

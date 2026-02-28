@@ -1,4 +1,4 @@
-package back.Cep.domain;
+package back.Endereco.domain;
 
 
 import lombok.AllArgsConstructor;
