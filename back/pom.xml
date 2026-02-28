@@ -51,7 +51,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.gtbr</groupId>
+			<artifactId>via-cep</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>repsy</id>
+			<url>https://repo.repsy.io/mvn/thalles/via-cep</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
