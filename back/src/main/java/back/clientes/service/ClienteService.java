@@ -8,6 +8,9 @@ import back.Endereco.utils.CEPUtils;
 import back.clientes.model.dto.ClienteDto;
 import back.clientes.model.entity.Clientes;
 import back.clientes.reposiory.ClienteRepository;
+import back.livros.model.entity.Livros;
+import back.livros.repository.LivroRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +20,10 @@ import java.util.List;
 public class ClienteService {
 
     @Autowired
-    public ClienteRepository pessoaRepository;
+    public ClienteRepository clienteRepository;
+
+    @Autowired
+    public LivroRepository livroRepository;
 
 
    public Clientes salvar(ClienteDto clienteDto){
@@ -26,8 +32,8 @@ public class ClienteService {
 
        Cep dadosApi = ViaCepClient.findCep(cepLimpo);
 
-       if(dadosApi != null){
-           throw new ViaCepFormatException("CEP não encontrado na base nascional.");
+       if(dadosApi == null || dadosApi.getCep() == null){
+           throw new ViaCepFormatException("CEP " + cepLimpo + "não encontrado na base nascional.");
        }
 
        Clientes entity = new Clientes();
@@ -38,24 +44,24 @@ public class ClienteService {
        EnderecoDTO endereco = new EnderecoDTO();
        endereco.setCep(dadosApi.getCep());
        endereco.setLogradouro(dadosApi.getLogradouro());
+       endereco.setComplemento(dadosApi.getComplemento());
        endereco.setBairro(dadosApi.getBairro());
        endereco.setLocalidade(dadosApi.getLocalidade());
        endereco.setUf(dadosApi.getUf());
-       endereco.setComplemento(dadosApi.getComplemento());
 
        entity.setEndereco(endereco);
 
-       return pessoaRepository.save(entity);
+       return clienteRepository.save(entity);
    }
 
     public List<Clientes> findAll() {
 
-        return pessoaRepository.findAll();
+        return clienteRepository.findAll();
     }
 
 
     public Clientes findById(Long id) {
-        return pessoaRepository.findById(id)
+        return clienteRepository.findById(id)
                 .orElseThrow(() -> {
                     return new RuntimeException("Pessoa com ID : " + id + " não encontrado no sistema!");
                 });
@@ -68,13 +74,30 @@ public class ClienteService {
         db.setLivros(ClienteDto.getLivros());
         db.setEndereco(ClienteDto.getEndereco());
 
-        return pessoaRepository.save(db);
+        return clienteRepository.save(db);
     }
 
     public void remove(Long id) {
         findById(id);
-        pessoaRepository.deleteById(id);
+        clienteRepository.deleteById(id);
     }
 
+
+    @Transactional
+    public Clientes cadastrarLivro(Long id, List<Long> livroId) {
+
+       Clientes cliente = clienteRepository
+               .findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+       List<Livros> adicionaLivro = livroRepository.findAllById(livroId);
+
+       for(Livros livro : adicionaLivro){
+           livro.setCliente(cliente);
+        }
+
+       cliente.getLivros().addAll(adicionaLivro);
+
+       return clienteRepository.save(cliente);
+   }
 
 }

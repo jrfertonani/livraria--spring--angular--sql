@@ -2,6 +2,7 @@ package back.clientes.model.entity;
 
 import back.Endereco.domain.EnderecoDTO;
 import back.livros.model.entity.Livros;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class Clientes implements Serializable {
     private String nome;
     private String telefone;
 
+    @JsonIgnore
     @OneToMany(mappedBy="cliente", cascade = CascadeType.ALL)
     private List<Livros> livros = new ArrayList<>();
 

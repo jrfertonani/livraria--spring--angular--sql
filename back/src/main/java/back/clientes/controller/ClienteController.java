@@ -63,5 +63,14 @@ public class ClienteController {
     }
 
 
+    @PutMapping("/{id}/comprar")
+    public ResponseEntity<Clientes> cadastrarLivro(@PathVariable Long id,
+                                                   @RequestBody List<Long> livroId){
+
+        Clientes entity = clienteService.cadastrarLivro(id, livroId);
+
+        return ResponseEntity.ok(entity);
+    }
+
 
 }
