@@ -1,5 +1,6 @@
 package back.livros.model.entity;
 
+import back.caixa.model.entity.Caixa;
 import back.clientes.model.entity.Clientes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -27,5 +28,14 @@ public class Livros implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cliente_id",nullable = true)
     private Clientes cliente;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "caixa_id")
+    private Caixa caixa;
+
+    public BigDecimal getPreco(){
+        return (this.preco == null) ? BigDecimal.ZERO : this.preco;
+    }
 
 }
