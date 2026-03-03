@@ -1,5 +1,6 @@
 package back.caixa.model.dto;
 
+import back.caixa.model.Enum.TipoPagamento;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,12 @@ public class CaixaDto {
 
     private Long clienteId;
     private List<Long> livrosIds;
+
+    private TipoPagamento tipoPagamento;
+
+    private BigDecimal valorRecebido;
+    private BigDecimal troco;
+
 
 
 }
