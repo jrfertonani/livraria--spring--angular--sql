@@ -25,11 +25,14 @@ public class CaixaController {
     private CaixaRepository caixaRepository;
 
     @PostMapping("/finalizar")
-    public ResponseEntity<Caixa> finalizarVenda(@RequestBody CaixaDto caixaDto){
-
-        Caixa caixa = caixaService.realizarVenda(caixaDto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(caixa);
+    public ResponseEntity<?> finalizarVenda(@RequestBody CaixaDto caixaDto) {
+        try {
+            Caixa caixa = caixaService.realizarVenda(caixaDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(caixa);
+        } catch (RuntimeException e) {
+            // Retorna o erro 400 (Bad Request) com a mensagem: "Pagamento insuficiente..."
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/saldo-total")
