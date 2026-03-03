@@ -1,6 +1,7 @@
 package back.caixa.service;
 
 import back.caixa.controller.CaixaController;
+import back.caixa.model.Enum.TipoPagamento;
 import back.caixa.model.dto.CaixaDto;
 import back.caixa.model.entity.Caixa;
 import back.caixa.repository.CaixaRepository;
@@ -10,6 +11,7 @@ import back.livros.model.entity.Livros;
 import back.livros.repository.LivroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,15 +33,15 @@ public class CaixaService {
     public LivroRepository livroRepository;
 
     @Transactional
-    public Caixa realizarVenda(Long clienteId, List<Long> livrosId) {
-        Clientes cliente = clienteRepository.findById(clienteId)
+    public Caixa realizarVenda(CaixaDto caixaDto) {
+        Clientes cliente = clienteRepository.findById(caixaDto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
 
         BigDecimal total = BigDecimal.ZERO;
         List<Livros> livrosVendidos = new ArrayList<>();
 
         // Percorremos a lista de IDs
-        for (Long id : livrosId) {
+        for (Long id : caixaDto.getLivrosIds()) {
             Livros livro = livroRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Livro ID " + id + " não encontrado."));
 
@@ -56,13 +58,39 @@ public class CaixaService {
         caixa.setTotal(total);
         caixa.setDataVenda(LocalDateTime.now());
         caixa.setLivros(livrosVendidos);
+        caixa.setTipoPagamento(caixaDto.getTipoPagamento());
 
         for (Livros l : livrosVendidos) {
             l.setCaixa(caixa);
         }
 
-        return caixaRepository.save(caixa);
+        if(caixa.getTipoPagamento() == TipoPagamento.DINHEIRO){
+            BigDecimal receber = caixa.getValorRecebido();
+
+            if(receber == null || receber.compareTo(total) < 0){
+                throw new RuntimeException("Valor indefirido.");
+            }
+
+            BigDecimal troco = receber.subtract(total);
+            caixa.setValorRecebido(receber);
+            caixa.setTroco(troco);
+        }else {
+
+            caixa.setValorRecebido(total);
+            caixa.setTroco(BigDecimal.ZERO);
+        }
+
+       return caixaRepository.save(caixa);
     }
 
 
+    public BigDecimal saltoTotal(){
+        BigDecimal saldo = caixaRepository.somarFaturamentoTotal();
+        return (saldo != null) ? saldo : BigDecimal.ZERO;
+    }
+
+    public BigDecimal saldoPorTipo(TipoPagamento tipo) {
+        BigDecimal saldo = caixaRepository.somarPorTipoPagamento(tipo);
+        return saldo != null ? saldo : BigDecimal.ZERO;
+    }
 }
